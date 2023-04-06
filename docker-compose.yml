@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  php:
+    image: message_bus_test_php
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    environment:
+      - COMPOSER_AUTH=${COMPOSER_AUTH}
+      - XDEBUG_MODE=develop,debug,coverage
+      - PHP_IDE_CONFIG=serverName=messenger-bus-test
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www:rw
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  amqp:
+    image: rabbitmq:3.9.11-management-alpine
+    ports:
+        - "15672:15672"

@@ -1,0 +1,52 @@
+{
+    "name": "sokil/message-bus-bundle",
+    "description": "Tools for Symfony Messenger including Symfony Bundle for easy configuration.",
+    "type": "symfony-bundle",
+    "require": {
+        "php": "^8.1",
+        "symfony/messenger": "^5.4|^6.0",
+        "symfony/config": "^5.4|^6.0",
+        "symfony/dependency-injection": "^5.4|^6.0",
+        "symfony/serializer": "^5.4|^6.0",
+        "doctrine/annotations": "^1.13",
+        "symfony/http-kernel": "^5.4|^6.0",
+        "symfony/yaml": "^5.4|^6.0",
+        "symfony/property-access": "^5.4|^6.0"
+    },
+    "require-dev": {
+        "ext-amqp": "*",
+        "phpunit/phpunit": "^9.5",
+        "symfony/redis-messenger": "^5.4|^6.0",
+        "symfony/amqp-messenger": "^5.4|^6.0",
+        "vimeo/psalm": "^5.9.0",
+        "squizlabs/php_codesniffer": "^3.7.2"
+    },
+    "suggest": {
+        "symfony/amqp-messenger": "To support AMQP messenger",
+        "ext-amqp": "To support AMQP messenger"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Sokil\\MessageBus\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sokil\\MessageBus\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/package-versions-deprecated": true
+        }
+    },
+    "scripts": {
+        "psalm":  "./vendor/bin/psalm --show-info=true",
+        "check-style": "./vendor/bin/phpcs",
+        "fix-style": "./vendor/bin/phpcbf",
+        "cover-ci": "./vendor/bin/phpunit --verbose ./tests --coverage-text --colors=never --log-junit report.xml",
+        "test": "./vendor/bin/phpunit"
+    }
+}
