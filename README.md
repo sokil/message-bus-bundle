@@ -105,7 +105,7 @@ message_bus:
 
 Also you may add attribute to your event instead of configuring in packages config:
 
-```
+```php
 <?php
 
 declare(strict_types=1);
