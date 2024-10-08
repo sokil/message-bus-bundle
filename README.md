@@ -2,6 +2,22 @@
 
 Tools for Symfony Messenger.
 
+* [Installation](#installation)
+* [Symfony Bundle Configuration](#symfony-bundle-configuration)
+* [Transports](#transports)
+  * [Dummy Transport](#dummy-transport)
+* [Serializing messages](#serializing-messages)
+  * [Default serializers](#default-serializers)
+  * [Message type](#message-type)
+  * [Portable serializer](#portable-serializer)
+    * [Motivation](#motivation)
+    * [Serializer service configuration](#serializer-service-configuration)
+    * [Message mapping](#message-mapping)
+* [Middlewares](#middlewares)
+  * [Building AMQP routing key from message type](#building-amqp-routing-key-from-message-type)
+* [Producing messages to external system](#producing-messages-to-external-system)
+* [Consuming messages from external system](#consuming-messages-from-external-system)
+
 ## Installation
 
 ```
@@ -85,6 +101,23 @@ message_bus:
     messages:
         App\User\Event\UserCreated:
             type: user.created
+```
+
+Also you may add attribute to your event instead of configuring in packages config:
+
+```
+<?php
+
+declare(strict_types=1);
+
+namespace Sokil\MessageBusBundle\Stubs\Event;
+
+use Sokil\MessageBusBundle\Attribute\Message;
+
+#[Message(type: 'user.updated')]
+class UserUpdated
+{
+}
 ```
 
 ### Portable serializer
