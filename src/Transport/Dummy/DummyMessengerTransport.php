@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Transport\Dummy;
+namespace Sokil\MessageBusBundle\Transport\Dummy;
 
 use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\Envelope;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Consuming;
+namespace Sokil\MessageBusBundle\Consuming;
 
-use Sokil\MessageBus\Serializer\PortableSerializer;
-use Sokil\MessageBus\Service\TypeLocator;
-use Sokil\MessageBus\Stubs\Event\UserCreated;
-use Sokil\MessageBus\Stubs\Normalizer\EmailNormalizer;
-use Sokil\MessageBus\Stubs\ValueObject\Email;
+use Sokil\MessageBusBundle\Serializer\PortableSerializer;
+use Sokil\MessageBusBundle\Service\TypeLocator;
+use Sokil\MessageBusBundle\Stubs\Event\UserCreated;
+use Sokil\MessageBusBundle\Stubs\Normalizer\EmailNormalizer;
+use Sokil\MessageBusBundle\Stubs\ValueObject\Email;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\EventDispatcher\EventDispatcher;

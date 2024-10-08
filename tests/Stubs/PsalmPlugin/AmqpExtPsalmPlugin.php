@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Stubs\PsalmPlugin;
+namespace Sokil\MessageBusBundle\Stubs\PsalmPlugin;
 
 use Psalm\Plugin\PluginEntryPointInterface;
 use Psalm\Plugin\RegistrationInterface;

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Middleware;
+namespace Sokil\MessageBusBundle\Middleware;
 
 use PHPUnit\Framework\TestCase;
-use Sokil\MessageBus\Service\TypeLocator;
-use Sokil\MessageBus\Stubs\Event\UserCreated;
-use Sokil\MessageBus\Stubs\ValueObject\Email;
+use Sokil\MessageBusBundle\Service\TypeLocator;
+use Sokil\MessageBusBundle\Stubs\Event\UserCreated;
+use Sokil\MessageBusBundle\Stubs\ValueObject\Email;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\StackMiddleware;
 use Symfony\Component\Messenger\Stamp\BusNameStamp;

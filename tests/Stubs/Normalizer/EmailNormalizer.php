@@ -2,19 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Stubs\Normalizer;
+namespace Sokil\MessageBusBundle\Stubs\Normalizer;
 
-use Sokil\MessageBus\Stubs\ValueObject\Email;
+use Sokil\MessageBusBundle\Stubs\ValueObject\Email;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
-use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class EmailNormalizer implements NormalizerInterface, DenormalizerInterface, CacheableSupportsMethodInterface
+class EmailNormalizer implements NormalizerInterface, DenormalizerInterface
 {
-    public function normalize(mixed $object, string $format = null, array $context = [])
-    {
+    public function normalize(
+        mixed $object,
+        string $format = null,
+        array $context = []
+    ): float|int|bool|\ArrayObject|array|string|null {
         if (!$object instanceof Email) {
             throw new InvalidArgumentException(sprintf('Invalid object passed, must be %s', Email::class));
         }
@@ -22,12 +24,12 @@ class EmailNormalizer implements NormalizerInterface, DenormalizerInterface, Cac
         return $object->getValue();
     }
 
-    public function supportsNormalization($data, string $format = null): bool
+    public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
         return $data instanceof Email;
     }
 
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
     {
         if (!is_string($data)) {
             throw new UnexpectedValueException('UUID must be passed as string');
@@ -40,13 +42,15 @@ class EmailNormalizer implements NormalizerInterface, DenormalizerInterface, Cac
         }
     }
 
-    public function supportsDenormalization($data, string $type, string $format = null): bool
+    public function supportsDenormalization($data, string $type, string $format = null, array $context = []): bool
     {
         return is_a($type, Email::class, true);
     }
 
-    public function hasCacheableSupportsMethod(): bool
+    public function getSupportedTypes(?string $format): array
     {
-        return __CLASS__ === static::class;
+        return [
+            Email::class => true,
+        ];
     }
 }

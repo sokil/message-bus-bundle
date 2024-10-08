@@ -2,19 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\DependencyInjection;
+namespace Sokil\MessageBusBundle\DependencyInjection;
 
+use Sokil\MessageBusBundle\Attribute\Message;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
-class MessengerBusExtension extends Extension
+class MessageBusExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
+        $this->registerAttributes($container);
+
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
@@ -24,6 +28,22 @@ class MessengerBusExtension extends Extension
         $this->defineTypeLocatorService($config, $container);
         $this->defineSerializerServices($config, $container);
         $this->setAMQPMiddlewarePattern($config, $container);
+    }
+
+    private function registerAttributes(ContainerBuilder $container): void
+    {
+        $container->registerAttributeForAutoconfiguration(
+            Message::class,
+            static function (
+                ChildDefinition $definition,
+                Message $attribute,
+                \ReflectionClass $reflector
+            ): void {
+                $definition->addTag(Message::TAG, [
+                    'type' => $attribute->type,
+                ]);
+            }
+        );
     }
 
     private function defineTypeLocatorService(array $config, ContainerBuilder $container)
@@ -36,7 +56,7 @@ class MessengerBusExtension extends Extension
             }
 
             $container
-                ->getDefinition('message_bus.type_locator')
+                ->getDefinition('sokil.message_bus.type_locator')
                 ->setArgument(0, $stampClassNameToTypeMap);
         }
 
@@ -47,8 +67,8 @@ class MessengerBusExtension extends Extension
             }
 
             $container
-                ->getDefinition('message_bus.type_locator')
-                ->setArgument(1, $messageClassNameToTypeMap);
+                ->getDefinition('sokil.message_bus.type_locator')
+                ->addMethodCall('appendMessageClassNameToTypeMap', [$messageClassNameToTypeMap]);
         }
     }
 
@@ -72,14 +92,14 @@ class MessengerBusExtension extends Extension
             // create serializer
             $container->setDefinition(
                 sprintf(
-                    'message_bus.serializer.%s.%s',
+                    'sokil.message_bus.serializer.%s.%s',
                     $serializerName,
                     $serializerConfig['format']
                 ),
                 new Definition(
                     $serializerConfig['class'],
                     [
-                        $container->getDefinition('message_bus.type_locator'),
+                        $container->getDefinition('sokil.message_bus.type_locator'),
                         $normalizers,
                         $serializerConfig['format']
                     ]
@@ -94,7 +114,7 @@ class MessengerBusExtension extends Extension
 
         if (!empty($pattern)) {
             $middlewareDefinition = $container->getDefinition(
-                'message_bus.middleware.amqp_message_routing_key_by_type'
+                'sokil.message_bus.middleware.amqp_message_routing_key_by_type'
             );
 
             $middlewareDefinition->setArgument(1, $pattern);

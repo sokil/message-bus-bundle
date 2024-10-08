@@ -15,6 +15,6 @@
     </projectFiles>
 
     <plugins>
-        <pluginClass class="\Sokil\MessageBus\Stubs\PsalmPlugin\AmqpExtPsalmPlugin" />
+        <pluginClass class="\Sokil\MessageBusBundle\Stubs\PsalmPlugin\AmqpExtPsalmPlugin" />
     </plugins>
 </psalm>

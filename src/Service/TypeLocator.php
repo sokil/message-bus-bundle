@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Service;
+namespace Sokil\MessageBusBundle\Service;
 
 class TypeLocator
 {
@@ -50,6 +50,21 @@ class TypeLocator
         }
 
         return $stampType;
+    }
+
+    /**
+     * @psalm-param array<string, string> $messageClassNameToTypeMap
+     */
+    public function appendMessageClassNameToTypeMap(array $messageClassNameToTypeMap): void
+    {
+        if (count(array_intersect_key($this->messageClassNameToTypeMap, $messageClassNameToTypeMap))) {
+            throw new \LogicException('Message class name already defined');
+        }
+
+        $this->messageClassNameToTypeMap = array_merge(
+            $this->messageClassNameToTypeMap,
+            $messageClassNameToTypeMap
+        );
     }
 
     public function getMessageClassNameByType(string $messageType): string

@@ -1,18 +1,18 @@
 services:
-    message_bus.type_locator:
-        class: Sokil\MessageBus\Service\TypeLocator
+    sokil.message_bus.type_locator:
+        class: Sokil\MessageBusBundle\Service\TypeLocator
         arguments:
-            - [] # Map of class names to types injected in extension
-            - [] # Map of class names to types injected in extension
+            - [] # Map of stub class names to types injected in extension
+            - [] # Map of message class names to types injected in extension
     
-    message_bus.middleware.amqp_message_routing_key_by_type:
-        class: Sokil\MessageBus\Middleware\AmqpMessageRoutingKeyByTypeMiddleware
+    sokil.message_bus.middleware.amqp_message_routing_key_by_type:
+        class: Sokil\MessageBusBundle\Middleware\AmqpMessageRoutingKeyByTypeMiddleware
         arguments:
-            - "@message_bus.type_locator"
+            - "@sokil.message_bus.type_locator"
             - "{messageType}" # May be replaced by configuration
 
-    message_bus.transport.dummy.transport_factory:
-        class: Sokil\MessageBus\Transport\Dummy\DummyMessengerTransportFactory
+    sokil.message_bus.transport.dummy.transport_factory:
+        class: Sokil\MessageBusBundle\Transport\Dummy\DummyMessengerTransportFactory
         tags: [messenger.transport_factory]
         arguments:
-            - null # Must be defined in KafkaClientExtension
+            - null # Must be defined in MessageBusExtension

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Sokil\MessageBusBundle\Stubs\Event;
 
+use Sokil\MessageBusBundle\Attribute\Message;
 use Sokil\MessageBusBundle\Stubs\ValueObject\Email;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-class UserCreated
+#[Message(type: 'user.updated')]
+class UserUpdated
 {
     #[Groups(['messenger'])]
     private string $userId;
@@ -16,16 +18,16 @@ class UserCreated
     private Email $email;
 
     #[Groups(['messenger'])]
-    private \DateTimeImmutable $createdAt;
+    private \DateTimeImmutable $updatedAt;
 
     public function __construct(
         string $userId,
         Email $email,
-        \DateTimeImmutable $createdAt
+        \DateTimeImmutable $updatedAt
     ) {
         $this->userId = $userId;
         $this->email = $email;
-        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
     }
 
     public function getUserId(): string
@@ -38,9 +40,9 @@ class UserCreated
         return $this->email;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
-        return $this->createdAt;
+        return $this->updatedAt;
     }
 
     /**

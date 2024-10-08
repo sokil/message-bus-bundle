@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Middleware;
+namespace Sokil\MessageBusBundle\Middleware;
 
-use Sokil\MessageBus\Service\TypeLocator;
+use Sokil\MessageBusBundle\Service\TypeLocator;
 use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;

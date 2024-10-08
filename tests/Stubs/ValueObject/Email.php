@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Stubs\ValueObject;
+namespace Sokil\MessageBusBundle\Stubs\ValueObject;
 
 class Email implements \Stringable
 {

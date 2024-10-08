@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Producing;
+namespace Sokil\MessageBusBundle\Producing;
 
 use PHPUnit\Framework\TestCase;
-use Sokil\MessageBus\Middleware\AmqpMessageRoutingKeyByTypeMiddleware;
-use Sokil\MessageBus\Service\TypeLocator;
-use Sokil\MessageBus\Stubs\Event\UserCreated;
-use Sokil\MessageBus\Stubs\ValueObject\Email;
+use Sokil\MessageBusBundle\Middleware\AmqpMessageRoutingKeyByTypeMiddleware;
+use Sokil\MessageBusBundle\Service\TypeLocator;
+use Sokil\MessageBusBundle\Stubs\Event\UserCreated;
+use Sokil\MessageBusBundle\Stubs\Event\UserUpdated;
+use Sokil\MessageBusBundle\Stubs\ValueObject\Email;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
 use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpTransportFactory;

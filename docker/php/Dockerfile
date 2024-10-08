@@ -1,7 +1,7 @@
-FROM php:8.1.1-fpm-buster
+FROM php:8.2-fpm-buster
 
 ARG AMQP_VERSION=1.11.0
-ARG XDEBUG_VERSION=3.1.1
+ARG XDEBUG_VERSION=3.2.2
 
 RUN apt-get update && \
     apt-get install -y \
@@ -25,6 +25,6 @@ RUN ln -s $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 
 COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/php.custom.ini
 
-COPY --from=composer:2.2.2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.8.1 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www

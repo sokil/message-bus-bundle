@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Serializer\Normalizer;
+namespace Sokil\MessageBusBundle\Serializer\Normalizer;
 
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
-use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
@@ -18,7 +17,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
  * @see \Symfony\Component\Messenger\Transport\Serialization\Normalizer\FlattenExceptionNormalizer
  * @see \Symfony\Component\Messenger\EventListener\AddErrorDetailsStampListener
  */
-final class TinyFlattenExceptionNormalizer implements DenormalizerInterface, ContextAwareNormalizerInterface
+final class TinyFlattenExceptionNormalizer implements DenormalizerInterface
 {
     public function normalize(mixed $object, string $format = null, array $context = []): array
     {
@@ -48,5 +47,12 @@ final class TinyFlattenExceptionNormalizer implements DenormalizerInterface, Con
     public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
     {
         return FlattenException::class === $type;
+    }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+            FlattenException::class => true,
+        ];
     }
 }

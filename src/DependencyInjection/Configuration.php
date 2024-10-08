@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\DependencyInjection;
+namespace Sokil\MessageBusBundle\DependencyInjection;
 
-use Sokil\MessageBus\Serializer\PortableSerializer;
+use Sokil\MessageBusBundle\Serializer\PortableSerializer;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('message_bus');
         $rootNode = $treeBuilder->getRootNode();

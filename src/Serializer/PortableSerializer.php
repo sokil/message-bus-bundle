@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Serializer;
+namespace Sokil\MessageBusBundle\Serializer;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Sokil\MessageBus\Serializer\Normalizer\TinyFlattenExceptionNormalizer;
-use Sokil\MessageBus\Service\TypeLocator;
+use Sokil\MessageBusBundle\Serializer\Normalizer\TinyFlattenExceptionNormalizer;
+use Sokil\MessageBusBundle\Service\TypeLocator;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\MessageDecodingFailedException;
 use Symfony\Component\Messenger\Stamp\NonSendableStampInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Messenger\Stamp\StampInterface;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface as MessengerTransportSerializerInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -54,11 +54,7 @@ class PortableSerializer implements MessengerTransportSerializerInterface
                     new ArrayDenormalizer(),
                     new TinyFlattenExceptionNormalizer(),
                     new ObjectNormalizer(
-                        new ClassMetadataFactory(
-                            new AnnotationLoader(
-                                new AnnotationReader()
-                            )
-                        )
+                        new ClassMetadataFactory(new AttributeLoader())
                     ),
                 ]
             ),

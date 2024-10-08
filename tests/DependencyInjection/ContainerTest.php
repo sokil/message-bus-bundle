@@ -2,14 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\DependencyInjection;
+namespace Sokil\MessageBusBundle\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use Sokil\MessageBus\Middleware\AmqpMessageRoutingKeyByTypeMiddleware;
-use Sokil\MessageBus\Service\TypeLocator;
+use Sokil\MessageBusBundle\DependencyInjection\CompilerPass\MessageBusCompilerPass;
+use Sokil\MessageBusBundle\Middleware\AmqpMessageRoutingKeyByTypeMiddleware;
+use Sokil\MessageBusBundle\Service\TypeLocator;
+use Sokil\MessageBusBundle\Stubs\Event\UserCreated;
+use Sokil\MessageBusBundle\Stubs\Event\UserUpdated;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -19,9 +24,14 @@ class ContainerTest extends TestCase
     {
         $containerBuilder = new ContainerBuilder();
 
-        $extension = new MessengerBusExtension();
+        // add compiler pass
+        $containerBuilder->addCompilerPass(new MessageBusCompilerPass());
+
+        // configure extension
+        $extension = new MessageBusExtension();
         $containerBuilder->registerExtension($extension);
 
+        // read app config
         $yamlConfig = <<<CONFIG
 stamps:
     Symfony\Component\Messenger\Stamp\DelayStamp:
@@ -33,14 +43,14 @@ stamps:
     Symfony\Component\Messenger\Stamp\TransportMessageIdStamp:
         type: transportMessageId
 messages:
-    App\User\Event\UserCreated:
+    Sokil\MessageBusBundle\Stubs\Event\UserCreated:
         type: user.created
 serializers:
     portable:
-        class: Sokil\MessageBus\Serializer\PortableSerializer
+        class: Sokil\MessageBusBundle\Serializer\PortableSerializer
         format: json
         normalizers:
-            - Sokil\MessageBus\Stubs\Normalizer\EmailNormalizer
+            - Sokil\MessageBusBundle\Stubs\Normalizer\EmailNormalizer
 middlewares:
     amqp_message_routing_key_by_type:
         pattern: "some-namespace.{messageType}"
@@ -51,16 +61,29 @@ CONFIG;
             Yaml::parse($yamlConfig)
         );
 
+        // load app services
+        $loader = new YamlFileLoader(
+            $containerBuilder,
+            new FileLocator(\dirname(__DIR__) . '/Resources/config')
+        );
+
+        $loader->load('services_test.yaml');
+
         // build container
         $containerBuilder
-            ->addCompilerPass(new class() implements CompilerPassInterface {
+            ->addCompilerPass(new class () implements CompilerPassInterface {
                 public function process(ContainerBuilder $container)
                 {
-                    foreach ($container->getDefinitions() as $definition) {
-                        $definition->setPublic(true);
+                    $ids = [
+                        'sokil.message_bus.type_locator',
+                        'sokil.message_bus.middleware.amqp_message_routing_key_by_type',
+                        'sokil.message_bus.serializer.portable.json',
+                    ];
+
+                    foreach ($ids as $id) {
+                        $container->getDefinition($id)->setPublic(true);
                     }
                 }
-
             })
             ->compile();
 
@@ -71,7 +94,7 @@ CONFIG;
     {
         $container = $this->buildContainer();
 
-        $typeLocator = $container->get('message_bus.type_locator');
+        $typeLocator = $container->get('sokil.message_bus.type_locator');
 
         $this->assertInstanceOf(TypeLocator::class, $typeLocator);
     }
@@ -80,7 +103,7 @@ CONFIG;
     {
         $container = $this->buildContainer();
 
-        $typeLocator = $container->get('message_bus.serializer.portable.json');
+        $typeLocator = $container->get('sokil.message_bus.serializer.portable.json');
 
         $this->assertInstanceOf(SerializerInterface::class, $typeLocator);
     }
@@ -89,8 +112,34 @@ CONFIG;
     {
         $container = $this->buildContainer();
 
-        $typeLocator = $container->get('message_bus.middleware.amqp_message_routing_key_by_type');
+        $typeLocator = $container->get('sokil.message_bus.middleware.amqp_message_routing_key_by_type');
 
         $this->assertInstanceOf(AmqpMessageRoutingKeyByTypeMiddleware::class, $typeLocator);
+    }
+
+    public function testConfigureTypeByConfig(): void
+    {
+        $container = $this->buildContainer();
+
+        /** @var TypeLocator $typeLocator */
+        $typeLocator = $container->get('sokil.message_bus.type_locator');
+
+        $this->assertSame(
+            'user.created',
+            $typeLocator->getMessageTypeByClassName(UserCreated::class)
+        );
+    }
+
+    public function testConfigureTypeByAttribute(): void
+    {
+        $container = $this->buildContainer();
+
+        /** @var TypeLocator $typeLocator */
+        $typeLocator = $container->get('sokil.message_bus.type_locator');
+
+        $this->assertSame(
+            'user.updated',
+            $typeLocator->getMessageTypeByClassName(UserUpdated::class)
+        );
     }
 }

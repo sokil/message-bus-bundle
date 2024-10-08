@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Serializer;
+namespace Sokil\MessageBusBundle\Serializer;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use PHPUnit\Framework\TestCase;
-use Sokil\MessageBus\Stubs\Event\UserCreated;
-use Sokil\MessageBus\Stubs\Normalizer\EmailNormalizer;
-use Sokil\MessageBus\Stubs\ValueObject\Email;
+use Sokil\MessageBusBundle\Stubs\Event\UserCreated;
+use Sokil\MessageBusBundle\Stubs\Normalizer\EmailNormalizer;
+use Sokil\MessageBusBundle\Stubs\ValueObject\Email;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\BusNameStamp;
 use Symfony\Component\Messenger\Stamp\TransportMessageIdStamp;
@@ -17,7 +16,7 @@ use Symfony\Component\Messenger\Transport\Serialization\Serializer as SymfonyTra
 use Symfony\Component\Messenger\Transport\Serialization\PhpSerializer as PhpTransportSerializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -35,9 +34,7 @@ class StandardSerializerTest extends TestCase
                     new ArrayDenormalizer(),
                     new ObjectNormalizer(
                         new ClassMetadataFactory(
-                            new AnnotationLoader(
-                                new AnnotationReader()
-                            )
+                            new AttributeLoader()
                         )
                     ),
                 ],
@@ -63,7 +60,7 @@ class StandardSerializerTest extends TestCase
             new Envelope(
                 new UserCreated(
                     'abcdef',
-                        new Email('test@test.com'),
+                    new Email('test@test.com'),
                     new \DateTimeImmutable('2022-01-26 10:16:00')
                 ),
                 [
@@ -78,7 +75,7 @@ class StandardSerializerTest extends TestCase
             [
                 'body' => '{"userId":"abcdef","email":"test@test.com","createdAt":"2022-01-26T10:16:00+00:00"}',
                 'headers' => [
-                    'type' => 'Sokil\MessageBus\Stubs\Event\UserCreated',
+                    'type' => 'Sokil\MessageBusBundle\Stubs\Event\UserCreated',
                     'X-Message-Stamp-Symfony\Component\Messenger\Stamp\BusNameStamp' => '[[]]',
                     'X-Message-Stamp-Symfony\Component\Messenger\Stamp\TransportMessageIdStamp' => '[[]]',
                     'Content-Type' => 'application/json',

@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Sokil\MessageBus\Transport\Dummy;
+namespace Sokil\MessageBusBundle\Transport\Dummy;
 
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportFactoryInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 
+/**
+ * @implements TransportFactoryInterface<DummyMessengerTransport>
+ */
 class DummyMessengerTransportFactory implements TransportFactoryInterface
 {
     public function createTransport(string $dsn, array $options, SerializerInterface $serializer): TransportInterface
