@@ -103,6 +103,20 @@ message_bus:
             type: user.created
 ```
 
+By default stamps already mapped to next values:
+
+```php
+DelayStamp::class => 'Delay',
+BusNameStamp::class => 'BusName',
+SentStamp::class => 'Sent',
+TransportMessageIdStamp::class => 'TransportMessageId',
+ErrorDetailsStamp::class => 'ErrorDetails',
+RedeliveryStamp::class => 'Redelivery',
+SentToFailureTransportStamp::class => 'SendToFailureTransportStamp',
+HandledStamp::class => 'Handled',
+ReceivedStamp::class => 'Received',
+```
+
 Also you may add attribute to your event instead of configuring in packages config:
 
 ```php
