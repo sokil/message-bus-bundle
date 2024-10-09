@@ -166,7 +166,7 @@ framework:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
             amqp:
                 dsn: '%env(AMQP_MESSENGER_TRANSPORT_DSN)%'
-                serializer: message_bus.serializer.some_serializer.json
+                serializer: sokil.message_bus.serializer.some_serializer.json
                 options:
                     exchange:
                         name: user.events
