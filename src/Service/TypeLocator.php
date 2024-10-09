@@ -11,7 +11,17 @@ class TypeLocator
      *
      * @psalm-var array<string, string> $stampClassNameToTypeMap
      */
-    private array $stampClassNameToTypeMap;
+    private array $stampClassNameToTypeMap = [
+        DelayStamp::class => 'Delay',
+        BusNameStamp::class => 'BusName',
+        SentStamp::class => 'Sent',
+        TransportMessageIdStamp::class => 'TransportMessageId',
+        ErrorDetailsStamp::class => 'ErrorDetails',
+        RedeliveryStamp::class => 'Redelivery',
+        SentToFailureTransportStamp::class => 'SendToFailureTransportStamp',
+        HandledStamp::class => 'Handled',
+        ReceivedStamp::class => 'Received',
+    ];
 
     /**
      * @var string[]
@@ -28,7 +38,7 @@ class TypeLocator
         array $stampClassNameToTypeMap,
         array $messageClassNameToTypeMap
     ) {
-        $this->stampClassNameToTypeMap = $stampClassNameToTypeMap;
+        $this->stampClassNameToTypeMap = array_merge($this->stampClassNameToTypeMap, $stampClassNameToTypeMap);
         $this->messageClassNameToTypeMap = $messageClassNameToTypeMap;
     }
 
