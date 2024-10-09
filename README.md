@@ -87,17 +87,17 @@ To define mapping from class names to types, add it to framework configuration i
 message_bus:
     stamps:
         Symfony\Component\Messenger\Stamp\DelayStamp:
-            type: delay
+            type: Delay
         Symfony\Component\Messenger\Stamp\BusNameStamp:
-            type: busName
+            type: BusName
         Symfony\Component\Messenger\Stamp\SentStamp:
-            type: sent
+            type: Sent
         Symfony\Component\Messenger\Stamp\TransportMessageIdStamp:
-            type: transportMessageId
+            type: TransportMessageId
         Symfony\Component\Messenger\Stamp\ErrorDetailsStamp:
-            type: errorDetails
+            type: ErrorDetails
         Symfony\Component\Messenger\Stamp\RedeliveryStamp:
-            type: redelivery
+            type: Redelivery
     messages:
         App\User\Event\UserCreated:
             type: user.created
