@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
  * Original FlattenExceptionNormalizer used to normalize exception data and put it to redelivery stamp.
  * After few redelivery tries this stamp may contain a lot of data and crash handling of message on some transports.
  *
- * This is replacement for original normaliser, used because there is to option to disable listener
+ * This is replacement for original normalizer, used because there is to option to disable listener
  * `AddErrorDetailsStampListener` which adds this stamp to message.
  *
  * @see \Symfony\Component\Messenger\Transport\Serialization\Normalizer\FlattenExceptionNormalizer
@@ -19,11 +19,18 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
  */
 final class TinyFlattenExceptionNormalizer implements DenormalizerInterface
 {
+    /**
+     * @param FlattenException $object
+     */
     public function normalize(mixed $object, string $format = null, array $context = []): array
     {
         $normalized = [
             'message' => $object->getMessage(),
             'code' => $object->getCode(),
+            'class' => $object->getClass(),
+            'file' => $object->getFile(),
+            'line' => $object->getLine(),
+            'trace' => [],
         ];
 
         return $normalized;
@@ -40,6 +47,10 @@ final class TinyFlattenExceptionNormalizer implements DenormalizerInterface
 
         $object->setMessage($data['message']);
         $object->setCode($data['code']);
+        $object->setClass($data['class']);
+        $object->setFile($data['file']);
+        $object->setLine($data['line']);
+        $object->setTrace($data['trace'], $data['file'], $data['line']);
 
         return $object;
     }
