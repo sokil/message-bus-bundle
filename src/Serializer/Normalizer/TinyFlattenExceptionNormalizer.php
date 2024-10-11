@@ -6,6 +6,7 @@ namespace Sokil\MessageBusBundle\Serializer\Normalizer;
 
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+\Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * Original FlattenExceptionNormalizer used to normalize exception data and put it to redelivery stamp.
@@ -17,7 +18,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
  * @see \Symfony\Component\Messenger\Transport\Serialization\Normalizer\FlattenExceptionNormalizer
  * @see \Symfony\Component\Messenger\EventListener\AddErrorDetailsStampListener
  */
-final class TinyFlattenExceptionNormalizer implements DenormalizerInterface
+final class TinyFlattenExceptionNormalizer implements DenormalizerInterface, NormalizerInterface
 {
     /**
      * @param FlattenException $object
