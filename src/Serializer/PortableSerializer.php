@@ -151,7 +151,7 @@ class PortableSerializer implements MessengerTransportSerializerInterface
                 continue;
             }
 
-            $stampType = lcfirst(substr($envelopeHeaderName, \strlen(self::STAMP_HEADER_NAME_PREFIX)));
+            $stampType = substr($envelopeHeaderName, \strlen(self::STAMP_HEADER_NAME_PREFIX));
 
             try {
                 $stampClassName = $this->typeLocator->getStampClassNameByType($stampType);
@@ -184,7 +184,7 @@ class PortableSerializer implements MessengerTransportSerializerInterface
         $headers = [];
         foreach ($allStamps as $stampClassName => $stamps) {
             $stampType = $this->typeLocator->getStampTypeByClassName($stampClassName);
-            $headers[self::STAMP_HEADER_NAME_PREFIX . ucfirst($stampType)] = $this->serializer->serialize(
+            $headers[self::STAMP_HEADER_NAME_PREFIX . $stampType] = $this->serializer->serialize(
                 $stamps,
                 $this->format
             );
