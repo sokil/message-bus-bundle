@@ -26,11 +26,11 @@ class PortableSerializerTest extends TestCase
         return new PortableSerializer(
             new TypeLocator(
                 [
-                    DelayStamp::class => 'delay',
+                    DelayStamp::class => 'Delay',
                     BusNameStamp::class => 'busName',
-                    SentStamp::class => 'sent',
+                    SentStamp::class => 'Sent',
                     TransportMessageIdStamp::class => 'transportMessageId',
-                    ErrorDetailsStamp::class => 'errorDetails',
+                    ErrorDetailsStamp::class => 'ErrorDetails',
                     RedeliveryStamp::class => 'redelivery',
                 ],
                 [
